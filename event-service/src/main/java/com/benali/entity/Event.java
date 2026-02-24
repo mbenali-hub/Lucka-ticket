@@ -5,6 +5,9 @@ import java.time.LocalTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.EnumeratedValue;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -16,8 +19,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-enum STATUS {ACTIVE, FINISHED, CANCELED}
-enum TYPEEVENT {SOCIAL, CORPORATE, CULTURAL, SPORTING, ENTERTAINMENT}
 
 @Entity
 @Table(name = "events")
@@ -27,13 +28,16 @@ enum TYPEEVENT {SOCIAL, CORPORATE, CULTURAL, SPORTING, ENTERTAINMENT}
 @Setter
 @Builder
 public class Event {
-
+    
+    public enum STATUS {ACTIVE, FINISHED, CANCELED}
+    public enum TYPEEVENT {SOCIAL, CORPORATE, CULTURAL, SPORTING, ENTERTAINMENT}
+    
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "event_id_seq")
     @SequenceGenerator(name = "event_id_seq", allocationSize = 50)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
     @Column(nullable = false)
@@ -55,10 +59,16 @@ public class Event {
     private String town;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private TYPEEVENT type;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private STATUS status;
+
+    @Column(nullable = false)
+    @Builder.Default
+    private boolean deleted = false;
 
     //@OneToMany
     //private List<User> users;

@@ -1,3 +1,18 @@
+server:
+  port: 8889
 spring:
+  h2:
+    console:
+      enabled: true
+  profiles:
+    active: dev
   application:
     name: event-service
+  config:
+    import: configserver:http://localhost:8888
+    
+
+  # cloud:
+  #   config:
+  #     uri: 
+      

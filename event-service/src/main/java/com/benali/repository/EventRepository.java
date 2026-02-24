@@ -7,5 +7,5 @@ import com.benali.entity.Event;
 
 @Repository
 public interface EventRepository extends JpaRepository<Event, Long>{
-
+   boolean existsByName(String name);
 }
