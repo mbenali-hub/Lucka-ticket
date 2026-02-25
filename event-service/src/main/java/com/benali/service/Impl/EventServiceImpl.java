@@ -1,4 +1,4 @@
-package com.benali.service.Impl;
+package com.benali.service.impl;
 
 import java.util.Collections;
 import java.util.List;
@@ -27,7 +27,7 @@ public class EventServiceImpl implements EventService{
 
         Event event = eventMapper.toEntity(eventDTO);
 
-        if(!eventRepository.existsById(eventDTO.getId()) && !eventRepository.existsByName(eventDTO.getName())){
+        if(event.getId()==null && !eventRepository.existsByName(eventDTO.getName())){
             event = eventRepository.save(event);
         }
         else{
@@ -43,35 +43,38 @@ public class EventServiceImpl implements EventService{
         return eventMapper.tDto(event);
     }
 
+    
+    @Override
+    public EventDTO updateEvent(EventDTO eventDTO, Long eventId) {
+        
+        Event event = getEventOrThrowException(eventId);
+        eventDTO.setId(eventId);
+        event = eventRepository.save(eventMapper.toEntity(eventDTO));
+        return eventMapper.tDto(event);       
+    }
+    
+    @Override
+    public EventDTO deleteEvent(Long eventId) {
+        
+        Event event = getEventOrThrowException(eventId);
+        event.setDeleted(true);
+        eventRepository.save(event);
+        return eventMapper.tDto(event);
+    }
+    
+    @Override
+    public List<EventDTO> listEvents() {
+        List<Event> events = eventRepository.findAll();
+        List<EventDTO> eventsDto = events.stream()
+        .map(eventMapper::tDto)
+        .toList();
+        return eventsDto;
+    }
+
     private Event getEventOrThrowException(Long eventId) {
 
         Event event = eventRepository.findById(eventId).orElseThrow();
         return event;
     }
-
-    @Override
-    public EventDTO updateEvent(EventDTO eventDTO) {
-
-        Event event = getEventOrThrowException(eventDTO.getId());
-        event = eventRepository.save(eventMapper.toEntity(eventDTO));
-        return eventMapper.tDto(event);       
-    }
-
-    @Override
-    public EventDTO deleteEvent(Long eventId) {
-
-        Event event = getEventOrThrowException(eventId);
-        event.setDeleted(true);
-        return eventMapper.tDto(event);
-    }
-
-    @Override
-    public List<EventDTO> listEvents() {
-        List<Event> events = eventRepository.findAll();
-        List<EventDTO> eventsDto = events.stream()
-                                        .map(eventMapper::tDto)
-                                        .toList();
-        return eventsDto;
-    }
-
+                                    
 }

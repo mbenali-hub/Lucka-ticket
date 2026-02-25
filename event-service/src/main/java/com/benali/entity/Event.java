@@ -1,5 +1,6 @@
 package com.benali.entity;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -27,7 +28,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class Event {
+public class Event{
     
     public enum STATUS {ACTIVE, FINISHED, CANCELED}
     public enum TYPEEVENT {SOCIAL, CORPORATE, CULTURAL, SPORTING, ENTERTAINMENT}
