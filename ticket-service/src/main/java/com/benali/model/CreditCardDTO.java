@@ -15,7 +15,4 @@ public class CreditCardDTO {
     private Integer mesCaducidad;
     private Integer yearCaducidad;
     private Integer cvv;
-    private String enmisor;
-    private String concepto;
-    private String cantidad;
 }
